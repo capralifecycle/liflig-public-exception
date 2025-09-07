@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>no.liflig</groupId>
+    <artifactId>kotlin-parent</artifactId>
+    <version>3.20250816.225535</version>
+  </parent>
+
+  <!--suppress MavenRedundantGroupId -->
+  <groupId>no.liflig</groupId>
+  <artifactId>liflig-public-exception</artifactId>
+  <version>${revision}</version>
+  <packaging>pom</packaging>
+
+  <name>${project.artifactId}</name>
+  <description>
+    Kotlin library that provides a PublicException type: an exception with a message that is meant
+    to be exposed to users.
+  </description>
+
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>https://github.com/capralifecycle/liflig-public-exception/blob/master/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Liflig</name>
+    <url>https://liflig.no/</url>
+  </organization>
+
+  <properties>
+    <major-version>1</major-version>
+    <revision>${major-version}.local-SNAPSHOT</revision>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- We depend on liflig-logging to allow attaching log fields to PublicException -->
+    <liflig-logging.version>2.20250901.091145</liflig-logging.version>
+
+    <!-- Testing -->
+    <junit.version>5.13.3</junit.version>
+    <kotest.version>5.9.1</kotest.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Testing -->
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Logging -->
+    <dependency>
+      <groupId>no.liflig</groupId>
+      <artifactId>liflig-logging</artifactId>
+      <version>${liflig-logging.version}</version>
+    </dependency>
+
+    <!-- Testing -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.kotest</groupId>
+      <artifactId>kotest-assertions-core-jvm</artifactId>
+      <version>${kotest.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- We use reflection in ErrorCode tests -->
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-reflect</artifactId>
+      <version>${kotlin.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <scm>
+    <developerConnection>
+      scm:git:https://github.com/capralifecycle/liflig-public-exception.git
+    </developerConnection>
+    <connection>scm:git:https://github.com/capralifecycle/liflig-public-exception.git</connection>
+    <url>https://github.com/capralifecycle/liflig-public-exception</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <repositories>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/capralifecycle/*</url>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/capralifecycle/liflig-public-exception</url>
+    </repository>
+  </distributionManagement>
+
+  <build>
+    <sourceDirectory>src/main/kotlin</sourceDirectory>
+    <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+
+    <plugins>
+      <plugin>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
+        <configuration>
+          <args>
+            <!-- Require explicit public modifiers, to avoid accidentally publishing internal APIs -->
+            <arg>-Xexplicit-api=strict</arg>
+          </args>
+        </configuration>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <phase>compile</phase>
+          </execution>
+          <execution>
+            <id>test-compile</id>
+            <goals>
+              <goal>test-compile</goal>
+            </goals>
+            <phase>test-compile</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Testing -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+      </plugin>
+
+      <!-- Plugin for enforcing proper dependency management -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <banDuplicatePomDependencyVersions/>
+                <dependencyConvergence/>
+                <requireUpperBoundDeps/>
+                <banDynamicVersions>
+                  <allowSnapshots>true</allowSnapshots>
+                </banDynamicVersions>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
