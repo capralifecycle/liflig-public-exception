@@ -95,15 +95,32 @@ risk of losing internal context for the developer, then `PublicException` may be
 
 ## Adding to your project
 
-**Maven:**
+**Maven:** We recommend adding `liflig-public-exception` to the `dependencyManagement` section, so
+that the same version is used across Liflig libraries. It's good practice to pair this with the
+[Maven Enforcer Plugin](https://maven.apache.org/enforcer/maven-enforcer-plugin/), with the
+[
+`<dependencyConvergence/>`](https://maven.apache.org/enforcer/enforcer-rules/dependencyConvergence.html)
+and
+[
+`<requireUpperBoundDeps/>`](https://maven.apache.org/enforcer/enforcer-rules/requireUpperBoundDeps.html)
+rules.
 
 <!-- @formatter:off -->
 ```xml
-<dependency>
-  <groupId>no.liflig</groupId>
-  <artifactId>liflig-public-exception</artifactId>
-  <version>${liflig-public-exception.version}</version>
-</dependency>
+<dependencyManagement>
+  <dependency>
+    <groupId>no.liflig</groupId>
+    <artifactId>liflig-public-exception</artifactId>
+    <version>${liflig-public-exception.version}</version>
+  </dependency>
+</dependencyManagement>
+
+<dependencies>
+  <dependency>
+    <groupId>no.liflig</groupId>
+    <artifactId>liflig-public-exception</artifactId>
+  </dependency>
+</dependencies>
 ```
 <!-- @formatter:on -->
 
