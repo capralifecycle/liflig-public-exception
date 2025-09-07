@@ -1,6 +1,6 @@
 package no.liflig.publicexception
 
-import no.liflig.logging.ExceptionWithLogFields
+import no.liflig.logging.ExceptionWithLoggingContext
 import no.liflig.logging.LogField
 import no.liflig.logging.LogLevel
 
@@ -61,17 +61,19 @@ import no.liflig.logging.LogLevel
  *   construct fields with the [field][no.liflig.logging.field] function from `liflig-logging`.
  */
 public open class PublicException(
-  public val errorCode: ErrorCode,
-  public val publicMessage: String,
-  public val publicDetail: String? = null,
-  public val internalDetail: String? = null,
-  public override val cause: Throwable? = null,
-  public val severity: LogLevel? = null,
-  logFields: Collection<LogField> = emptyList(),
-) : ExceptionWithLogFields(logFields) {
+    public val errorCode: ErrorCode,
+    public val publicMessage: String,
+    public val publicDetail: String? = null,
+    public val internalDetail: String? = null,
+    public override val cause: Throwable? = null,
+    public val severity: LogLevel? = null,
+    logFields: Collection<LogField> = emptyList(),
+) : ExceptionWithLoggingContext(logFields) {
   /**
+   * The exception message. Includes [publicMessage], [publicDetail] and [internalDetail].
+   *
    * This message should _not_ be exposed to clients, since it may include [internalDetail].
-   * Instead, you should:
+   * Instead, you should do one of the following:
    * - Use [publicMessage]/[publicDetail]
    * - Use the `PublicException.toErrorResponse` extension function from `liflig-http4k-setup`
    * - Let the exception propagate and be caught by the `PublicExceptionFilter` from
@@ -79,16 +81,7 @@ public open class PublicException(
    *   appropriate HTTP response
    */
   public override val message: String
-    get() = buildExceptionMessage(publicMessage, publicDetail, internalDetail)
-
-  // Public companion object, so that liflig-http4k-setup can add extension functions to it
-  public companion object {
-    @JvmStatic
-    private fun buildExceptionMessage(
-      publicMessage: String,
-      publicDetail: String?,
-      internalDetail: String?
-    ): String {
+    get() {
       // If we only have publicMessage, we can just return it as-is, saving an allocation
       if (publicDetail == null && internalDetail == null) {
         return publicMessage
@@ -116,7 +109,9 @@ public open class PublicException(
       }
       return message.toString()
     }
-  }
+
+  // Public companion object, so that liflig-http4k-setup can add extension functions to it
+  public companion object
 }
 
 /**
@@ -135,24 +130,19 @@ public class ErrorCode private constructor(@JvmField public val httpStatusCode: 
   /** See [ErrorCode]. */
   public companion object {
     /** Maps to a 400 Bad Request HTTP status. */
-    @JvmField
-    public val BAD_REQUEST: ErrorCode = ErrorCode(400)
+    @JvmField public val BAD_REQUEST: ErrorCode = ErrorCode(400)
 
     /** Maps to a 401 Unauthorized HTTP status. */
-    @JvmField
-    public val UNAUTHORIZED: ErrorCode = ErrorCode(401)
+    @JvmField public val UNAUTHORIZED: ErrorCode = ErrorCode(401)
 
     /** Maps to a 403 Forbidden HTTP status. */
-    @JvmField
-    public val FORBIDDEN: ErrorCode = ErrorCode(403)
+    @JvmField public val FORBIDDEN: ErrorCode = ErrorCode(403)
 
     /** Maps to a 404 Not Found HTTP status. */
-    @JvmField
-    public val NOT_FOUND: ErrorCode = ErrorCode(404)
+    @JvmField public val NOT_FOUND: ErrorCode = ErrorCode(404)
 
     /** Maps to a 409 Conflict HTTP status. */
-    @JvmField
-    public val CONFLICT: ErrorCode = ErrorCode(409)
+    @JvmField public val CONFLICT: ErrorCode = ErrorCode(409)
 
     /**
      * Maps to a 500 Internal Server Error HTTP status.
@@ -161,8 +151,7 @@ public class ErrorCode private constructor(@JvmField public val httpStatusCode: 
      * sometimes we do want to map an exception to an Internal Server Error and still provide a
      * descriptive error message to the user.
      */
-    @JvmField
-    public val INTERNAL_SERVER_ERROR: ErrorCode = ErrorCode(500)
+    @JvmField public val INTERNAL_SERVER_ERROR: ErrorCode = ErrorCode(500)
 
     /** When adding a new error code, remember to add it to this list! */
     @JvmField
