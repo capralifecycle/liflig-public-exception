@@ -43,7 +43,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- We depend on liflig-logging to allow attaching log fields to PublicException -->
-    <liflig-logging.version>2.20250907.111253</liflig-logging.version>
+    <liflig-logging.version>2.20250907.150844</liflig-logging.version>
 
     <!-- Testing -->
     <junit.version>5.13.3</junit.version>
