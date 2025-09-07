@@ -5,18 +5,18 @@ import no.liflig.logging.LogField
 import no.liflig.logging.LogLevel
 
 /**
- * Exception with a message that is safe to expose publically to clients.
+ * Exception with a message that is meant to be exposed publicly to users.
  *
  * When this is thrown in the context of an HTTP handler using
  * [`liflig-http4k-setup`](https://github.com/capralifecycle/liflig-http4k-setup), then it will be
  * caught, logged, and turned into an HTTP response with a body on the
  * [Problem Details](https://datatracker.ietf.org/doc/html/rfc7807) format.
  *
- * If mapping a different exception to a `PublicException`, remember to set [cause] so that the
- * original exception is included in the logs.
+ * If you're mapping a different exception to a `PublicException`, remember to set [cause] so that
+ * the original exception is included in the logs.
  *
- * It is recommended to use named parameters when passing [publicMessage] and [publicDetail], to
- * make it explicit that these are publicly-exposed.
+ * It is recommended to use named parameters for [publicMessage] and [publicDetail], to make it
+ * explicit that these are exposed publicly.
  *
  * ### Example
  *
