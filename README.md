@@ -90,8 +90,8 @@ middleware will catch `PublicException`s, automatically mapping them to appropri
 context as possible for the developer, while also allowing you to give a more useful response to the
 user. Note that it is not the appropriate tool for error _handling_ - if a part of your application
 deals with well-known, recoverable errors, you may want to use something like Arrow instead for
-that. But when all you want to do is to give the user more context about an error error, without the
-risk of losing internal context for the developer, then `PublicException` may be the right tool.
+that. But when all you want to do is to give the user more context about an error, without the risk
+of losing internal context for the developer, then `PublicException` may be the right tool.
 
 ## Adding to your project
 
