@@ -33,7 +33,7 @@ internal class PublicExceptionTest {
     exception.publicDetail.shouldBe("Missing required field 'id'")
     exception.internalDetail.shouldBe("Internal detail")
     exception.message.shouldBe(
-        "Invalid request body (Missing required field 'id') [Internal detail]",
+        "Invalid request body - Missing required field 'id' (Internal detail)",
     )
     exception.cause?.message.shouldBe("Cause exception")
     exception.severity.shouldBe(LogLevel.WARN)
@@ -63,7 +63,7 @@ internal class PublicExceptionTest {
             publicMessage = "Public message",
             publicDetail = "Public detail",
         )
-    exception1.message.shouldBe("Public message (Public detail)")
+    exception1.message.shouldBe("Public message - Public detail")
 
     val exception2 =
         PublicException(
@@ -71,7 +71,7 @@ internal class PublicExceptionTest {
             publicMessage = "Public message",
             internalDetail = "Internal detail",
         )
-    exception2.message.shouldBe("Public message [Internal detail]")
+    exception2.message.shouldBe("Public message (Internal detail)")
   }
 
   @Test

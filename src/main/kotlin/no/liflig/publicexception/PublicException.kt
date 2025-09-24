@@ -47,10 +47,13 @@ import no.liflig.logging.LogLevel
  * @param publicDetail An optional extra message to show to the client. When mapped to an HTTP
  *   response, it will be in the `detail` field of the Problem Details body.
  *
- *   Also included in the logged exception message.
+ *   Also included in the logged exception message (separated by " - " after [publicMessage]).
  *
  * @param internalDetail Additional detail message to attach to the exception for internal logging.
  *   Not included in HTTP responses.
+ *
+ *   Included in the exception message in parentheses after [publicMessage]/[publicDetail].
+ *
  * @param cause If mapping a different exception to a `PublicException`, set or override this
  *   parameter so that the original exception is also included in the logs.
  * @param severity By default, the `LoggingFilter` from `liflig-http4k-setup` logs at the `ERROR`
@@ -70,11 +73,15 @@ public open class PublicException(
     logFields: Collection<LogField> = emptyList(),
 ) : ExceptionWithLoggingContext(logFields) {
   /**
-   * The exception message. Includes [publicMessage], [publicDetail] and [internalDetail].
+   * The exception message. Includes [publicMessage], [publicDetail] and [internalDetail], on the
+   * following format:
+   * ```text
+   * Public message - Public detail (Internal detail)
+   * ```
    *
    * This message should _not_ be exposed to clients, since it may include [internalDetail].
    * Instead, you should do one of the following:
-   * - Use [publicMessage]/[publicDetail]
+   * - Use [publicMessage]/[publicDetail] directly
    * - Use the `PublicException.toErrorResponse` extension function from `liflig-http4k-setup`
    * - Let the exception propagate and be caught by the `PublicExceptionFilter` from
    *   `liflig-http4k-setup` (included in the default filter stack), which will map it to an
@@ -90,22 +97,22 @@ public open class PublicException(
       // Pre-calculate capacity, so that StringBuilder only has to allocate once
       val capacity =
           publicMessage.length +
-              (if (publicDetail == null) 0 else publicDetail.length + 3) + // +3 for " ()"
-              (if (internalDetail == null) 0 else internalDetail.length + 3) // +3 for " []"
+              (if (publicDetail == null) 0 else publicDetail.length + 3) + // +3 for " - "
+              (if (internalDetail == null) 0 else internalDetail.length + 3) // +3 for " ()"
 
       val message = StringBuilder(capacity)
       message.append(publicMessage)
       if (publicDetail != null) {
         message.append(' ')
-        message.append('(')
+        message.append('-')
+        message.append(' ')
         message.append(publicDetail)
-        message.append(')')
       }
       if (internalDetail != null) {
         message.append(' ')
-        message.append('[')
+        message.append('(')
         message.append(internalDetail)
-        message.append(']')
+        message.append(')')
       }
       return message.toString()
     }
