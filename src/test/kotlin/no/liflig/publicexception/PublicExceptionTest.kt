@@ -1,6 +1,6 @@
 package no.liflig.publicexception
 
-import io.kotest.assertions.forEachAsClue
+import io.kotest.assertions.asClue
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -139,11 +139,13 @@ internal class PublicExceptionTest {
     ErrorCode.entries.shouldContainExactlyInAnyOrder(expectedErrorCodes)
 
     // Finally, verify that each ErrorCode member has expected HTTP status code
-    tests.forEachAsClue { test ->
-      test.errorCode.httpStatusCode.shouldBe(test.expectedHttpStatusCode)
+    tests.forEach { test ->
+      test.asClue {
+        test.errorCode.httpStatusCode.shouldBe(test.expectedHttpStatusCode)
 
-      ErrorCode.fromHttpStatusCode(test.expectedHttpStatusCode)
-          .shouldBeSameInstanceAs(test.errorCode)
+        ErrorCode.fromHttpStatusCode(test.expectedHttpStatusCode)
+            .shouldBeSameInstanceAs(test.errorCode)
+      }
     }
   }
 

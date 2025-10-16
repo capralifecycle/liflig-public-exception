@@ -42,12 +42,15 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+    <!-- Needed for kotest v6 -->
+    <java.version>11</java.version>
+
     <!-- We depend on liflig-logging to allow attaching log fields to PublicException -->
-    <liflig-logging.version>2.20251016.061516</liflig-logging.version>
+    <liflig-logging.version>2.20251016.073034</liflig-logging.version>
 
     <!-- Testing -->
     <junit.version>6.0.0</junit.version>
-    <kotest.version>5.9.1</kotest.version>
+    <kotest.version>6.0.4</kotest.version>
   </properties>
 
   <dependencyManagement>
@@ -125,6 +128,7 @@
         <artifactId>kotlin-maven-plugin</artifactId>
         <version>${kotlin.version}</version>
         <configuration>
+          <jvmTarget>${java.version}</jvmTarget>
           <args>
             <!-- Require explicit public modifiers, to avoid accidentally publishing internal APIs -->
             <arg>-Xexplicit-api=strict</arg>
