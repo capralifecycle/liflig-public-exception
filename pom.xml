@@ -42,8 +42,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- Needed for kotest v6 -->
-    <java.version>11</java.version>
+    <!-- Required by JUnit v6 -->
+    <java.version>17</java.version>
 
     <!-- We depend on liflig-logging to allow attaching log fields to PublicException -->
     <liflig-logging.version>2.20251016.073034</liflig-logging.version>
