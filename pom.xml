@@ -7,7 +7,7 @@
   <parent>
     <groupId>no.liflig</groupId>
     <artifactId>kotlin-parent</artifactId>
-    <version>3.20251016.053254</version>
+    <version>3.20251118.230634</version>
   </parent>
 
   <!--suppress MavenRedundantGroupId -->
@@ -36,7 +36,7 @@
   </organization>
 
   <properties>
-    <major-version>1</major-version>
+    <major-version>2</major-version>
     <revision>${major-version}.local-SNAPSHOT</revision>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,11 +46,11 @@
     <java.version>17</java.version>
 
     <!-- We depend on liflig-logging to allow attaching log fields to PublicException -->
-    <liflig-logging.version>2.20251016.073034</liflig-logging.version>
+    <liflig-logging.version>3.20251121.115719</liflig-logging.version>
 
     <!-- Testing -->
-    <junit.version>6.0.0</junit.version>
-    <kotest.version>6.0.4</kotest.version>
+    <junit.version>6.0.1</junit.version>
+    <kotest.version>6.0.5</kotest.version>
   </properties>
 
   <dependencyManagement>
