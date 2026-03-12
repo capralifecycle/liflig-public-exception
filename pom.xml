@@ -7,7 +7,7 @@
   <parent>
     <groupId>no.liflig</groupId>
     <artifactId>kotlin-parent</artifactId>
-    <version>3.20251118.230634</version>
+    <version>3.20260311.194334</version>
   </parent>
 
   <!--suppress MavenRedundantGroupId -->
@@ -46,7 +46,7 @@
     <java.version>17</java.version>
 
     <!-- We depend on liflig-logging to allow attaching log fields to PublicException -->
-    <liflig-logging.version>3.20251121.115719</liflig-logging.version>
+    <liflig-logging.version>3.20260312.075908</liflig-logging.version>
 
     <!-- Testing -->
     <junit.version>6.0.1</junit.version>
