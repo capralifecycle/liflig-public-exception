@@ -152,6 +152,26 @@ public class ErrorCode private constructor(@JvmField public val httpStatusCode: 
     @JvmField public val CONFLICT: ErrorCode = ErrorCode(409)
 
     /**
+     * Maps to a 412 Precondition Failed HTTP status. Use when an `If-Match` (or similar) header
+     * does not match the current resource state — the client must refresh and retry with the
+     * updated version.
+     */
+    @JvmField public val PRECONDITION_FAILED: ErrorCode = ErrorCode(412)
+
+    /**
+     * Maps to a 428 Precondition Required HTTP status. Use when a conditional request header (e.g.
+     * `If-Match`) is required but was not sent by the client.
+     */
+    @JvmField public val PRECONDITION_REQUIRED: ErrorCode = ErrorCode(428)
+
+    /**
+     * Maps to a 422 Unprocessable Entity HTTP status. Use when the request is well-formed but
+     * cannot be processed due to semantic errors — e.g. a referenced entity exists but is in the
+     * wrong state for the operation (wrong role, wrong status).
+     */
+    @JvmField public val UNPROCESSABLE_ENTITY: ErrorCode = ErrorCode(422)
+
+    /**
      * Maps to a 500 Internal Server Error HTTP status.
      *
      * It may seem counter-intuitive to have an Internal Server Error on a [PublicException], but
@@ -169,6 +189,9 @@ public class ErrorCode private constructor(@JvmField public val httpStatusCode: 
             FORBIDDEN,
             NOT_FOUND,
             CONFLICT,
+            PRECONDITION_FAILED,
+            PRECONDITION_REQUIRED,
+            UNPROCESSABLE_ENTITY,
             INTERNAL_SERVER_ERROR,
         )
 
@@ -186,6 +209,9 @@ public class ErrorCode private constructor(@JvmField public val httpStatusCode: 
       FORBIDDEN -> "Forbidden"
       NOT_FOUND -> "Not Found"
       CONFLICT -> "Conflict"
+      PRECONDITION_FAILED -> "Precondition Failed"
+      PRECONDITION_REQUIRED -> "Precondition Required"
+      UNPROCESSABLE_ENTITY -> "Unprocessable Entity"
       INTERNAL_SERVER_ERROR -> "Internal Server Error"
       // Since we don't use an enum (see ErrorCode docstring for why), we need an else branch here.
       // We verify in our tests that this case is never reached.

@@ -111,6 +111,21 @@ internal class PublicExceptionTest {
                 expectedToString = "Conflict",
             ),
             ErrorCodeTest(
+                ErrorCode.PRECONDITION_FAILED,
+                expectedHttpStatusCode = 412,
+                expectedToString = "Precondition Failed",
+            ),
+            ErrorCodeTest(
+                ErrorCode.PRECONDITION_REQUIRED,
+                expectedHttpStatusCode = 428,
+                expectedToString = "Precondition Required",
+            ),
+            ErrorCodeTest(
+                ErrorCode.UNPROCESSABLE_ENTITY,
+                expectedHttpStatusCode = 422,
+                expectedToString = "Unprocessable Entity",
+            ),
+            ErrorCodeTest(
                 ErrorCode.INTERNAL_SERVER_ERROR,
                 expectedHttpStatusCode = 500,
                 expectedToString = "Internal Server Error",
